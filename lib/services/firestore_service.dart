@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
+import 'package:logging/logging.dart';
 import '../models/product.dart';
 import '../models/inventory_item.dart';
+import '../utils/error_handler.dart';
 
 class FirestoreService {
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
   static final CollectionReference _productsCollection = _db.collection('products');
   static final CollectionReference _quantitiesCollection = _db.collection('quantities');
+  static final Logger _logger = Logger('FirestoreService');
 
   // Product operations
   static Future<bool> checkIfNameExists(String name) async {
