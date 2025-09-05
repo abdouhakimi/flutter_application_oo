@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'enums.dart';
 
 class InventoryItem {
   String? id;
@@ -31,9 +32,17 @@ class InventoryItem {
     };
   }
 
-  bool get isOutOfStock => quantity == 0;
+  InventoryStatus get status {
+    if (quantity == 0) return InventoryStatus.outOfStock;
+    if (quantity <= (originalQuantity * 0.2)) return InventoryStatus.lowStock;
+    return InventoryStatus.available;
+  }
   
-  String get statusText => isOutOfStock ? 'نفذت الكمية' : quantity.toString();
+  bool get isOutOfStock => status == InventoryStatus.outOfStock;
+  
+  String get statusText => status == InventoryStatus.outOfStock 
+      ? status.arabicName 
+      : quantity.toString();
   
   double get stockPercentage {
     if (originalQuantity == 0) return 0.0;

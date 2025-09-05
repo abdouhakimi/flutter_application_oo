@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import '../models/product.dart';
 import '../models/inventory_item.dart';
-import '../services/firestore_service.dart';
+import '../providers/product_provider.dart';
+import '../providers/inventory_provider.dart';
 import '../utils/validators.dart';
 import '../utils/constants.dart';
+import '../utils/error_handler.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_card.dart';
+import '../widgets/loading_widget.dart';
 
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({super.key});
@@ -122,21 +126,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
   }
 
   void _showSuccessSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: AppConstants.successColor,
-      ),
-    );
+    ErrorHandler.showSuccessSnackBar(context, message);
   }
 
-  void _showErrorSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: AppConstants.errorColor,
-      ),
-    );
+  void _showErrorSnackBar(dynamic error) {
+    ErrorHandler.showErrorSnackBar(context, error);
   }
 
   @override

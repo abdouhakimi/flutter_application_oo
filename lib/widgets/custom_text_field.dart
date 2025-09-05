@@ -5,77 +5,140 @@ import '../utils/constants.dart';
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final String labelText;
-  final String? Function(String?)? validator;
+  final String? hintText;
+  final IconData? prefixIcon;
+  final Widget? suffixIcon;
   final TextInputType keyboardType;
   final List<TextInputFormatter>? inputFormatters;
-  final Widget? suffixIcon;
-  final Widget? prefixIcon;
+  final String? Function(String?)? validator;
   final bool readOnly;
   final VoidCallback? onTap;
-  final ValueChanged<String>? onChanged;
-  final int? maxLines;
-  final int? maxLength;
+  final Function(String)? onChanged;
+  final int maxLines;
+  final bool obscureText;
+  final bool enabled;
 
   const CustomTextField({
     super.key,
     required this.controller,
     required this.labelText,
-    this.validator,
+    this.hintText,
+    this.prefixIcon,
+    this.suffixIcon,
     this.keyboardType = TextInputType.text,
     this.inputFormatters,
-    this.suffixIcon,
-    this.prefixIcon,
+    this.validator,
     this.readOnly = false,
     this.onTap,
     this.onChanged,
     this.maxLines = 1,
-    this.maxLength,
+    this.obscureText = false,
+    this.enabled = true,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      validator: validator,
       keyboardType: keyboardType,
       inputFormatters: inputFormatters,
+      validator: validator,
       readOnly: readOnly,
       onTap: onTap,
       onChanged: onChanged,
       maxLines: maxLines,
-      maxLength: maxLength,
+      obscureText: obscureText,
+      enabled: enabled,
       decoration: InputDecoration(
         labelText: labelText,
-        labelStyle: const TextStyle(color: AppConstants.primaryColor),
-        prefixIcon: prefixIcon,
+        hintText: hintText,
+        prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
         suffixIcon: suffixIcon,
-        filled: true,
-        fillColor: Colors.white,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppConstants.borderRadius),
-          borderSide: const BorderSide(color: AppConstants.primaryColor, width: 2.0),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppConstants.borderRadius),
-          borderSide: const BorderSide(color: AppConstants.primaryColor, width: 2.0),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppConstants.borderRadius),
-          borderSide: const BorderSide(color: AppConstants.secondaryColor, width: 2.0),
+          borderSide: const BorderSide(
+            color: AppConstants.secondaryColor,
+            width: 2.0,
+          ),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppConstants.borderRadius),
-          borderSide: const BorderSide(color: AppConstants.errorColor, width: 2.0),
+          borderSide: const BorderSide(
+            color: AppConstants.errorColor,
+            width: 2.0,
+          ),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppConstants.borderRadius),
-          borderSide: const BorderSide(color: AppConstants.errorColor, width: 2.0),
+          borderSide: const BorderSide(
+            color: AppConstants.errorColor,
+            width: 2.0,
+          ),
         ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: AppConstants.defaultPadding,
           vertical: AppConstants.defaultPadding,
         ),
       ),
+    );
+  }
+}
+
+class PriceTextField extends StatelessWidget {
+  final TextEditingController controller;
+  final String labelText;
+  final String? Function(String?)? validator;
+  final bool enabled;
+
+  const PriceTextField({
+    super.key,
+    required this.controller,
+    required this.labelText,
+    this.validator,
+    this.enabled = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomTextField(
+      controller: controller,
+      labelText: labelText,
+      keyboardType: TextInputType.number,
+      prefixIcon: Icons.attach_money,
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+      validator: validator,
+      enabled: enabled,
+    );
+  }
+}
+
+class QuantityTextField extends StatelessWidget {
+  final TextEditingController controller;
+  final String labelText;
+  final String? Function(String?)? validator;
+  final bool enabled;
+
+  const QuantityTextField({
+    super.key,
+    required this.controller,
+    required this.labelText,
+    this.validator,
+    this.enabled = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomTextField(
+      controller: controller,
+      labelText: labelText,
+      keyboardType: TextInputType.number,
+      prefixIcon: Icons.inventory,
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+      validator: validator,
+      enabled: enabled,
     );
   }
 }
